@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/common.css">
+    <link rel="stylesheet" href="./css/number.css">
+    <style>
+        .number_body .demo {
+            width: 100px;
+            height: 100px;
+            background-color: aqua;
+        }
+        #demo {
+            background-color: blanchedalmond;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    <input id="number" type="text" readonly placeholder="请输入数字" />
+    <div class="number_body">
+        <div class="demo" id="demo">aaa</div>
+    </div>
+</body>
+<script src="./js/common.js"></script>
+<script>
+    dave.virmKeyboard({
+        elem: 'number',
+        type: 'phone',
+        theme: '#ff0000',
+        onConfirm: function(value){
+            console.log(value);
+        }
+    });
+</script>
+</html>

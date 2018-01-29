@@ -1,0 +1,15 @@
+.number-body { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 999; }
+.number-content {position: absolute; bottom: 0; left: 0; width: 100%; height: 10rem; z-index: 1001;}
+.number-top { width: 100%; height: 2rem; padding: 0 2.5%; background-color: #efefef; border-bottom: 1px #dddddd solid; }
+.number-cancel{ float: left; width: 4rem; height: 100%; font-size: .7rem; line-height: 2rem; text-align: center; color: #666;}
+.number-confirm{ float: right; width: 4rem; height: 100%; font-size: .7rem; line-height: 2rem; text-align: center; color: cornflowerblue;}
+.number-showNum{ height: 100%; margin: 0 4rem;}
+.number-showNum input { width: 100%; height: 100%; font-size: .8rem; text-align: center; color: #999;}
+.number-cont { width: 100%; height: 8rem; background-color: #efefef;}
+.number-keyboard { width: 100%; height: 100%;}
+.number-keyboard-item { float: left; width: 30%; height: 1.75rem; margin-left: 2.5%; margin-top: .2rem; line-height: 1.75rem; text-align: center; color: #333; background-color: #fff; border: 1px #dddddd solid; border-radius: 4px; -webkit-border-radius: 4px; }
+.number-keyboard-item.disable { background-color: #efefef; color: #999;}
+/* layer css */
+.numberMaskbg{ z-index: 1000; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(30, 30, 30, .5);}
+.number-inner-maskBg { z-index: 1002; display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(30, 30, 30, .5); }
+.number-inner-message { z-index: 1003; display: none; position: absolute; top: 50%; left: 50%; padding: .5rem; font-size: .7rem; line-height: 1.2rem; text-align: center; color: #fff; background-color: #666; transform: translate(-50%, -50%); -webkit-transform: translate(-50%, -50%);}
