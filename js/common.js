@@ -173,156 +173,145 @@ numberKeyBoard.prototype = {
         dave.$('#' + this.ID).style.display = 'block';
         this.setKayboard();
     },
+    certIdNum: function(items, specialCode, showInput){
+        specialCode.innerHTML = 'X';
+        if (showInput.value.length === 17) {
+            this.allKey(items)
+        } else if(showInput.value.length < 17) {
+            this.allNum(items);
+        } else {
+            this.noneKey(items);
+        }
+    },
+    numberNum: function(items, specialCode, showInput){
+        this.allNum(items);
+        if (!this.option.length) {
+            return;
+        };
+        if (showInput.value.length === this.option.length) {
+            this.noneKey(items);
+        }
+    },
+    phoneNum: function(items, specialCode, showInput){
+        if (showInput.value.length === 0) {
+            this.severalKey(items, [0]);
+        } else if (showInput.value.length === 1) {
+            this.severalKey(items, [2,3,4,6,7]);
+        } else if(showInput.value.length === 11){
+            this.noneKey(items);
+        } else {
+            this.allNum(items);
+        }
+    },
+    floatNum: function(items, specialCode, showInput){
+        this.allNum(items);
+            if (!showInput.value.length) {
+                var maxValue = this.option.maxValue;
+                if (maxValue) {
+                    if (maxValue.length === 1){
+                        this.severalKey(items, this.getKeys(maxValue));
+                    }
+                }
+            } else if (showInput.value.length === 1) {
+                if (showInput.value === '0') {
+                    this.severalKey(items, [9]);
+                } else {
+                    var maxValue = this.option.maxValue;
+                    if (maxValue) {
+                        if (Math.floor(maxValue/showInput.value) < 10) {
+                            this.severalKey(items, [9])
+                        } else if(Math.floor(maxValue/showInput.value) === 10) {
+                            var k = maxValue - (showInput.value * 10);
+                            this.severalKey(items, this.getKeys(k));
+                        } else {
+                            var f = maxValue - (showInput.value * 10);
+                            if (f < 9) {
+                                this.severalKey(items, this.getKeys(f));
+                            } else {
+                                this.allKey(items);
+                            }
+                        }
+                    } else {
+                        this.allKey(items);
+                    }
+                }
+            } else if (showInput.value.length > 1) {
+                if (showInput.value.indexOf('.') > -1) {
+                    var floatList = showInput.value.split('.');
+                    if (type === 'money') {
+                        if (floatList[1].length === 2) {
+                            this.noneKey(items);
+                        } else {
+                            this.allNum(items);
+                        }
+                    }else {
+                        if (floatList[1].length === this.option.precision) {
+                            this.noneKey(items);
+                        } else {
+                            this.allNum(items);
+                        }
+                    }
+                } else {
+                    var maxValue = this.option.maxValue;
+                    if (!maxValue) {
+                        this.allKey(items);
+                    } else {
+                        if(Math.floor(maxValue/showInput.value) < 10) {
+                            this.noneKey(items);
+                        } else if (Math.floor(maxValue/showInput.value) === 10) {
+                            var lastMaxNum = maxValue - (showInput.value * 10);
+                            if (lastMaxNum < 9) {
+                                this.severalKey(items, this.getKeys(lastMaxNum));
+                            } else {
+                                this.allKey(items);
+                            }
+                        } else if (Math.floor(maxValue/showInput.value) > 10) {
+                            this.allKey(items);
+                        }
+                    }
+                }
+            }
+    },
+    getKeys: function(n){
+        var keys = [],
+            i = 0;
+        for (i = 0; i < n + 1; i++) {
+            if (i === 0) {
+                keys.push(10);
+            } else {
+                keys.push(i);
+            }
+        }
+        return keys;
+    },
     setKayboard: function(){
         var type = this.option.type,
             specialCode = this.getElems('class', 'number-keyboard-item').item(9),
             showInput = this.getElems('id', 'number_showNum'),
             items = this.getElems('class', 'number-keyboard-item');
+        specialCode.innerHTML = '.';
         // 身份证的长度是默认好的
         if (type === 'certId') {
-            specialCode.innerHTML = 'X';
-            if (showInput.value.length === 17) {
-                this.allKey(items)
-            } else if(showInput.value.length < 17) {
-                this.allNum(items);
-            } else {
-                this.noneKey(items);
-            }
-        } else { // 如果不是身份证的话
-            specialCode.innerHTML = '.';
-            // 如果是数字
-            if (type === 'number') {
-                this.allNum(items);
-                if (!this.option.length) {
-                    return;
-                };
-                if (showInput.value.length === this.option.length) {
-                    this.noneKey(items);
-                }
-            }
-            
-            // 电话号码的规则是相对固定的
-            if (type === 'phone') {
-                if (showInput.value.length === 0) {
-                    this.severalKey(items, [0]);
-                } else if (showInput.value.length === 1) {
-                    this.severalKey(items, [2,3,4,6,7]);
-                } else if(showInput.value.length === 11){
-                    this.noneKey(items);
-                } else {
-                    this.allNum(items);
-                }
-            }
-            // 如果是金钱和浮点数，和长度关系不大，只和最大值还有最小值有关，以及精度有关
-            if (type === 'money' || type === 'float') {
-                this.allNum(items);
-                if (!showInput.value.length) {
-                    var maxValue = this.option.maxValue;
-                    if (maxValue) {
-                        if (maxValue.length === 1){
-                            keys = [], i = 0;
-                            for (i = 0; i < maxValue; i++) {
-                                if (i === 0) {
-                                    keys.push(10);
-                                } else {
-                                    keys.push(i);
-                                }
-                            }
-                            this.severalKey(items, keys);
-                        }
-                    }
-                }
-                else if (showInput.value.length === 1) {
-                    if (showInput.value === '0') {
-                        this.severalKey(items, [9]);
-                    } else {
-                        var maxValue = this.option.maxValue;
-                        if (maxValue) {
-                            if (Math.floor(maxValue/showInput.value) < 10) {
-                                this.severalKey(items, [9])
-                            } else if(Math.floor(maxValue/showInput.value) === 10) {
-                                var k = maxValue - (showInput.value * 10),
-                                    i = 0, ks = [];
-                                for (i = 0; i < k + 1; i++) {
-                                    if (i === 0) {
-                                        keys.push(10);
-                                    } else {
-                                        keys.push(i);
-                                    }
-                                }
-                                this.severalKey(items, keys);
-                            } else {
-                                var f = maxValue - (showInput.value * 10);
-                                if (f < 9) {
-                                    var i = 0, ks = [];
-                                    for (i = 0; i < f; i++) {
-                                        if (i === 0) {
-                                            keys.push(10);
-                                        } else {
-                                            keys.push(i);
-                                        }
-                                    }
-                                    this.severalKey(items, keys);
-                                } else {
-                                    this.allKey(items);
-                                }
-                            }
-                        } else {
-                            this.allKey(items);
-                        }
-                    }
-                } else if (showInput.value.length > 1) {
-                    if (showInput.value.indexOf('.') > -1) {
-                        var floatList = showInput.value.split('.');
-                        if (type === 'money') {
-                            if (floatList[1].length === 2) {
-                                this.noneKey(items);
-                            } else {
-                                this.allNum(items);
-                            }
-                        }else {
-                            if (floatList[1].length === this.option.precision) {
-                                this.noneKey(items);
-                            } else {
-                                this.allNum(items);
-                            }
-                        }
-                    } else {
-                        var maxValue = this.option.maxValue;
-                        if (!maxValue) {
-                            this.allKey(items);
-                        } else {
-                            if(Math.floor(maxValue/showInput.value) < 10) {
-                                this.noneKey(items);
-                            } else if (Math.floor(maxValue/showInput.value) === 10) {
-                                var lastMaxNum = maxValue - (showInput.value * 10),
-                                    keys = [], i = 0;
-                                if (lastMaxNum < 9) {
-                                    for (i = 0; i < lastMaxNum + 1; i++) {
-                                        if (i === 0) {
-                                            keys.push(10);
-                                        } else {
-                                            keys.push(i);
-                                        }
-                                    }
-                                    this.severalKey(items, keys);
-                                } else {
-                                    this.allKey(items);
-                                }
-                                
-                            } else if (showInput.value.length < maxLength && Math.floor(maxValue/showInput.value) > 10) {
-                                this.allKey(items);
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (type === 'number' || type === 'interge' || type === 'phone' || !this.option.precision || (((type === 'money') || (type === 'float')) && showInput.value.indexOf('.') > -1) || (((type === 'money') || (type === 'float')) && showInput.value.length === 0)) {
-                this.nonePoint(specialCode);
-            } else {
-                this.point(specialCode);
-            }
+            this.certIdNum(items, specialCode, showInput);
+        } 
+        // 如果是数字
+        if (type === 'number') {
+            this.numberNum(items, specialCode, showInput);
+        }
+        
+        // 电话号码的规则是相对固定的
+        if (type === 'phone') {
+            this.phoneNum(items, specialCode, showInput);
+        }
+        // 如果是金钱和浮点数，和长度关系不大，只和最大值还有最小值有关，以及精度有关
+        if (type === 'money' || type === 'float') {
+            this.floatNum(items, specialCode, showInput);
+        }
+        // 做统一处理，出发到这个条件，那个特殊的.就置灰，没有触发的话就放开
+        if (type === 'number' || type === 'interge' || type === 'phone' || !this.option.precision || (((type === 'money') || (type === 'float')) && showInput.value.indexOf('.') > -1) || (((type === 'money') || (type === 'float')) && showInput.value.length === 0)) {
+            this.nonePoint(specialCode);
+        } else {
+            this.point(specialCode);
         }
     },
     handleAddNum: function(target) {
