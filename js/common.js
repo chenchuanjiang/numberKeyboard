@@ -3,11 +3,13 @@
  * @param {object} option
  * @param {string} option.elem (最好是id)
  * @param {string} option.theme 主题 可以是rgb #ededed #eee
- * @param {string} option.type 类型 整数、金钱、浮点数、身份证号、数字
- * @param {int} option.length 长度限制（整数的）
+ * @param {string} option.type 类型 金钱、浮点数、身份证号、数字、电话号码
+ * @param {int} option.length 长度限制（数字、电话号码）
+ * @param {string} option.minValue 最小值 (金钱、浮点数) 必须是整数
+ * @param {string} option.maxValue 最大值 （金钱、浮点数）必须是整数
  * @param {string} option.cancelColor 取消按钮文字的颜色
  * @param {string} option.confirmColor 确定按钮文字的颜色
- * @param {int} option.precision 小数点后的位数 （只有在是浮点数的情况下才会有）
+ * @param {int} option.precision 小数点后的位数 （只有在是浮点数的情况下才会有，如果为0，则是整数）
  * @param {string} option.template html模板的id(废弃)
  * @param {function} option.onconfirm 点击确定需要的回调函数
  * @param {function} option.oncancel 点击取消需要的回调函数
@@ -71,20 +73,18 @@ numberKeyBoard.prototype = {
         }
         var $css = [],
             colors = this.setColor(this.option.theme);
-        // $css.push('#' + this.ID + ' .number-content,');
-        // $css.push('#' + this.ID + ' .number-top,');
-        $css.push('#' + this.ID + ' .number-cont {');
-        $css.push('background-color: ' + colors[8] + ';}');
-        $css.push('#' + this.ID + ' .number-keyboard-item.disable {');
-        $css.push('background-color: ' + colors[5] + ';}');
-        $css.push('#' + this.ID + ' .number-keyboard-item {');
-        $css.push('background-color: ' + colors[2] + ';');
-        if (colors[2].substr(1, 1) === 'f') {
-            $css.push('color: #000;');
+        if (colors[5].substr(1, 2) > 'ee' && colors[5].substr(3, 2) > 'ee' && colors[5].substr(5, 2) > 'ee') {
+            
         }else {
+            $css.push('#' + this.ID + ' .number-cont {');
+            $css.push('background-color: ' + colors[8] + ';}');
+            $css.push('#' + this.ID + ' .number-keyboard-item.disable {');
+            $css.push('background-color: ' + colors[5] + ';}');
+            $css.push('#' + this.ID + ' .number-keyboard-item {');
+            $css.push('background-color: ' + colors[2] + ';');
             $css.push('color: #fff;');
+            $css.push('}');   
         }
-        $css.push('}');
         return $css.join('');
     },
     // 根据主题的颜色，设置整个区块的颜色
@@ -177,6 +177,7 @@ numberKeyBoard.prototype = {
             specialCode = this.getElems('class', 'number-keyboard-item').item(9),
             showInput = this.getElems('id', 'number_showNum'),
             items = this.getElems('class', 'number-keyboard-item');
+        // 身份证的长度是默认好的
         if (type === 'certId') {
             specialCode.innerHTML = 'X';
             if (showInput.value.length === 17) {
@@ -186,26 +187,20 @@ numberKeyBoard.prototype = {
             } else {
                 this.noneKey(items);
             }
-        } else {
+        } else { // 如果不是身份证的话
             specialCode.innerHTML = '.';
-
+            // 如果是数字
             if (type === 'number') {
+                this.allNum(items);
                 if (!this.option.length) {
-                    this.allNum(items);
+                    return;
                 };
                 if (showInput.value.length === this.option.length) {
                     this.noneKey(items);
                 }
             }
-
-            if (type === 'interge') {
-                if (showInput.value.length === 0) {
-                    this.severalNoneKey(items, [10]);
-                } else {
-                    this.allNum(items);
-                }
-            }
-
+            
+            // 电话号码的规则是相对固定的
             if (type === 'phone') {
                 if (showInput.value.length === 0) {
                     this.severalKey(items, [0]);
@@ -217,14 +212,63 @@ numberKeyBoard.prototype = {
                     this.allNum(items);
                 }
             }
-
+            // 如果是金钱和浮点数，和长度关系不大，只和最大值还有最小值有关，以及精度有关
             if (type === 'money' || type === 'float') {
                 this.allNum(items);
-                if (showInput.value.length === 1) {
+                if (!showInput.value.length) {
+                    var maxValue = this.option.maxValue;
+                    if (maxValue) {
+                        if (maxValue.length === 1){
+                            keys = [], i = 0;
+                            for (i = 0; i < lastMaxNum; i++) {
+                                if (i === 0) {
+                                    keys.push(10);
+                                } else {
+                                    keys.push(i);
+                                }
+                            }
+                            this.severalKey(items, keys);
+                        }
+                    }
+                }
+                else if (showInput.value.length === 1) {
                     if (showInput.value === '0') {
                         this.severalKey(items, [9]);
                     } else {
-                        this.allKey(items);
+                        var maxValue = this.option.maxValue;
+                        if (maxValue) {
+                            if (Math.floor(maxValue/showInput.value) < 10) {
+                                this.severalKey(items, [9])
+                            } else if(Math.floor(maxValue/showInput.value) === 10) {
+                                var k = maxValue % showInput.value,
+                                    i = 0, ks = [];
+                                for (i = 0; i < lastMaxNum; i++) {
+                                    if (i === 0) {
+                                        keys.push(10);
+                                    } else {
+                                        keys.push(i);
+                                    }
+                                }
+                                this.severalKey(items, keys);
+                            } else {
+                                var f = maxValue - (showInput.value * 10);
+                                if (f < 9) {
+                                    var i = 0, ks = [];
+                                    for (i = 0; i < lastMaxNum; i++) {
+                                        if (i === 0) {
+                                            keys.push(10);
+                                        } else {
+                                            keys.push(i);
+                                        }
+                                    }
+                                    this.severalKey(items, keys);
+                                } else {
+                                    this.allKey(items);
+                                }
+                            }
+                        } else {
+                            this.allKey(items);
+                        }
                     }
                 } else if (showInput.value.length > 1) {
                     if (showInput.value.indexOf('.') > -1) {
@@ -243,17 +287,32 @@ numberKeyBoard.prototype = {
                             }
                         }
                     } else {
-                        var maxLength = this.option.length || 8;
-                        if(showInput.value.length === maxLength) {
-                            this.noneKey(items);
-                        } else {
+                        var maxValue = this.option.maxValue;
+                        if (!maxValue) {
                             this.allKey(items);
+                        } else {
+                            if(Math.floor(maxValue/showInput.value) < 10) {
+                                this.noneKey(items);
+                            } else if (Math.floor(maxValue/showInput.value) === 10) {
+                                var lastMaxNum = maxValue % showInput.value,
+                                    keys = [], i = 0;
+                                for (i = 0; i < lastMaxNum; i++) {
+                                    if (i === 0) {
+                                        keys.push(10);
+                                    } else {
+                                        keys.push(i);
+                                    }
+                                }
+                                this.severalKey(items, keys);
+                            } else if (showInput.value.length < maxLength && Math.floor(maxValue/showInput.value) > 10) {
+                                this.allKey(items);
+                            }
                         }
                     }
                 }
             }
 
-            if (type === 'number' || type === 'interge' || type === 'phone' || (((type === 'money') || (type === 'float')) && showInput.value.indexOf('.') > -1) || (((type === 'money') || (type === 'float')) && showInput.value.length === 0)) {
+            if (type === 'number' || type === 'interge' || type === 'phone' || !this.option.precision || (((type === 'money') || (type === 'float')) && showInput.value.indexOf('.') > -1) || (((type === 'money') || (type === 'float')) && showInput.value.length === 0)) {
                 this.nonePoint(specialCode);
             } else {
                 this.point(specialCode);
@@ -424,6 +483,7 @@ numberKeyBoard.prototype = {
 /*-------------------------tool---------------------------------*/
 
 window.dave = {
+    keyboard: null,
     defaultParam: {
         theme: '#ffffff',
         type: 'number',
@@ -537,6 +597,7 @@ window.dave = {
     certIdReg: /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/,
     floatReg: /^(0|[1-9][0-9]*)+(.[0-9]*)?$/,
     numberReg: /^([0-9]*)$/,
-    phoneReg: /^1(3|4|5|7|8)\d{9}$/
+    phoneReg: /^1(3|4|5|7|8)\d{9}$/,
+    intergeReg: /^[1-9][0-9]*$/
 };
 

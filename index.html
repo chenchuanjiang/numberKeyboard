@@ -7,30 +7,64 @@
     <title>Document</title>
     <link rel="stylesheet" href="./css/common.css">
     <link rel="stylesheet" href="./css/number.css">
-    <style>
-        .number_body .demo {
-            width: 100px;
-            height: 100px;
-            background-color: aqua;
-        }
-        #demo {
-            background-color: blanchedalmond;
-            color: #000;
-        }
-    </style>
 </head>
 <body>
-    <input id="number" type="text" readonly placeholder="请输入数字" />
+
+    <div class="searchCont">
+        <div class="item">
+            <span>主题theme</span>
+            <input type="color" name="" id="theme" class="theme" value="#888888">
+        </div>
+        <div class="item">
+            <span>输入类型</span>&nbsp;&nbsp;
+            <label><input type="radio" name="type" id="certid" value="certid">certid</label>&nbsp;&nbsp;
+            <label></label><input type="radio" name="type" id="number" value="number">number</label>&nbsp;&nbsp;
+            <label></label><input type="radio" name="type" id="phone" value="phone">phone</label>&nbsp;&nbsp;
+            <label></label><input type="radio" name="type" id="money" value="money">money</label>&nbsp;&nbsp;<br />
+            <label></label><input type="radio" name="type" id="float" value="float">float</label>&nbsp;&nbsp;
+            <!-- <label></label><input type="radio" name="type" id="interge">phone</label>&nbsp;&nbsp;
+            <label></label><input type="radio" name="type" id="float">money</label>&nbsp;&nbsp; -->
+        </div>
+        <div>
+            <span>整数长度</span>
+            <input type="number" name="length" id="length">
+        </div>
+        <div>
+            <span>浮点数精度</span>
+            <input type="number" name="precision" id="precision">
+        </div>
+        <div>
+            <span>最大值</span>
+            <input type="number" name="maxNum" id="maxNum">
+        </div>
+        <div>
+            <span>最小值</span>
+            <input type="number" name="minNum" id="minNum">
+        </div>
+        <div class="btnCont">
+            <button class="sure" onclick="checkCondition(this)">确定</button>
+        </div>
+    </div>
+    <div class="activeKeyboard">
+        <span>进入插件的入口input</span>
+        <input id="showKeyboard" class="showKeyboard" type="text" readonly placeholder="请输入数字" />
+    </div>
 </body>
 <script src="./js/common.js"></script>
 <script>
-    dave.virmKeyboard({
-        elem: 'number',
-        type: 'phone',
-        theme: '#ff0000',
-        onConfirm: function(value){
-            console.log(value);
-        }
-    });
+    var option = {
+        elem: 'showKeyboard'
+    };
+    function checkCondition(ev){
+        option.theme = dave.$('#theme').value;
+        option.type = document.querySelectorAll('input[type=radio]:checked').item(0).value;
+        option.length = parseInt(dave.$('#length').value);
+        option.precision = parseInt(dave.$('#precision').value);
+        option.maxValue = parseInt(dave.$('#maxNum').value);
+        option.minValue = parseInt(dave.$('#minNum').value);
+        dave.virmKeyboard(option);
+    }
+
+    
 </script>
 </html>
