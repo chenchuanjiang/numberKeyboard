@@ -20,6 +20,7 @@ function numberKeyBoard(option) {
     this.hasDom = false;
     this.ID = '';
     this.numberBody = '';
+    this.message = '';
 };
 
 numberKeyBoard.prototype = {
@@ -220,7 +221,7 @@ numberKeyBoard.prototype = {
                     if (maxValue) {
                         if (maxValue.length === 1){
                             keys = [], i = 0;
-                            for (i = 0; i < lastMaxNum; i++) {
+                            for (i = 0; i < maxValue; i++) {
                                 if (i === 0) {
                                     keys.push(10);
                                 } else {
@@ -240,9 +241,9 @@ numberKeyBoard.prototype = {
                             if (Math.floor(maxValue/showInput.value) < 10) {
                                 this.severalKey(items, [9])
                             } else if(Math.floor(maxValue/showInput.value) === 10) {
-                                var k = maxValue % showInput.value,
+                                var k = maxValue - (showInput.value * 10),
                                     i = 0, ks = [];
-                                for (i = 0; i < lastMaxNum; i++) {
+                                for (i = 0; i < k + 1; i++) {
                                     if (i === 0) {
                                         keys.push(10);
                                     } else {
@@ -254,7 +255,7 @@ numberKeyBoard.prototype = {
                                 var f = maxValue - (showInput.value * 10);
                                 if (f < 9) {
                                     var i = 0, ks = [];
-                                    for (i = 0; i < lastMaxNum; i++) {
+                                    for (i = 0; i < f; i++) {
                                         if (i === 0) {
                                             keys.push(10);
                                         } else {
@@ -294,16 +295,21 @@ numberKeyBoard.prototype = {
                             if(Math.floor(maxValue/showInput.value) < 10) {
                                 this.noneKey(items);
                             } else if (Math.floor(maxValue/showInput.value) === 10) {
-                                var lastMaxNum = maxValue % showInput.value,
+                                var lastMaxNum = maxValue - (showInput.value * 10),
                                     keys = [], i = 0;
-                                for (i = 0; i < lastMaxNum; i++) {
-                                    if (i === 0) {
-                                        keys.push(10);
-                                    } else {
-                                        keys.push(i);
+                                if (lastMaxNum < 9) {
+                                    for (i = 0; i < lastMaxNum + 1; i++) {
+                                        if (i === 0) {
+                                            keys.push(10);
+                                        } else {
+                                            keys.push(i);
+                                        }
                                     }
+                                    this.severalKey(items, keys);
+                                } else {
+                                    this.allKey(items);
                                 }
-                                this.severalKey(items, keys);
+                                
                             } else if (showInput.value.length < maxLength && Math.floor(maxValue/showInput.value) > 10) {
                                 this.allKey(items);
                             }
@@ -433,6 +439,21 @@ numberKeyBoard.prototype = {
             return false;
         }
         if (dave[this.option.type + 'Reg'].test(showInput.value)) {
+            if (['money', 'float'].indexOf(this.option.type) > -1) {
+                var minValue = this.option.minValue || 0,
+                    maxValue = this.option.maxValue;
+                if (!maxValue) {
+                    if (showInput.value < minValue) {
+                        this.message = '请输入大于' + minValue + '的值';
+                        return false;
+                    }
+                } else {
+                    if (showInput.value < minValue || showInput.value > maxValue) {
+                        this.message = '请输入' + minValue + '到' + maxValue + '之间的值';
+                        return false;
+                    }
+                }
+            }
             return true;
         }
         return false;
@@ -447,16 +468,21 @@ numberKeyBoard.prototype = {
         }
     },
     handleConfirm: function(){
-        var showInput = this.getElems('id', 'number_showNum'),
+        var _this = this,
+            showInput = this.getElems('id', 'number_showNum'),
+            numContent = this.getElems('class', 'number-content').item(0),
             msgMask = this.getElems('class', 'number-inner-maskBg').item(0),
             magCont = this.getElems('class', 'number-inner-message').item(0);
         if (!this.checkInput()) {
-            msgMask.style.display = 'block';
+            if (!this.message) {
+                this.message = '请输入正确的信息';
+            }
+            magCont.innerHTML = this.message;
+            numContent.style.display = 'none';
             magCont.style.display = 'block';
-            magCont.innerHTML = '请输入正确的信息';
             setTimeout(function() {
-                msgMask.style.display = 'none';
-                magCont.style.display = 'none';
+                document.body.removeChild(_this.numberBody);
+                dave.$('head').item(0).removeChild(_this.$css);
             }, 1000);
             return;
         }
@@ -572,6 +598,7 @@ window.dave = {
     getTemplate: function(){
         var templateList = [];
         templateList.push('<div class="numberMaskbg"></div>');
+        templateList.push('<div class="number-inner-message"></div>');
         templateList.push('<div class="number-content">');
         templateList.push('<div class="number-top"><a href="javascript:void(0);" class="number-cancel" id="number_cancel">取消</a><a href="javascript:void(0);" class="number-confirm" id="number_confirm">确定</a><div class="number-showNum"><input type="text" name="" readonly id="number_showNum"></div></div>');
         
@@ -588,8 +615,7 @@ window.dave = {
             }
         }
         templateList.push('</ul></div>');
-        templateList.push('<div class="number-inner-maskBg"></div>');
-        templateList.push('<div class="number-inner-message"></div>');
+        // templateList.push('<div class="number-inner-maskBg"></div>');
         templateList.push('</div>');
         return templateList.join('');
     },
