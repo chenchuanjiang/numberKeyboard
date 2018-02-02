@@ -1,4 +1,5 @@
 .number-body { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 999; }
+/* 数字键盘 */
 .number-body .number-content {position: absolute; bottom: 0; left: 0; width: 100%; height: 200px; z-index: 1001;}
 .number-body .number-top { width: 100%; height: 40px; padding: 0 2.5%; background-color: #efefef; border-bottom: 1px #dddddd solid; }
 .number-body .number-cancel{ float: left; width: 80px;; height: 100%; font-size: 14px; line-height: 40px; text-align: center; color: #666;}
@@ -9,15 +10,22 @@
 .number-body .number-keyboard { width: 100%; height: 100%;}
 .number-body .number-keyboard-item { float: left; width: 30%; height: 35px; margin-left: 2.5%; margin-top: 4px; line-height: 35px; text-align: center; color: #333; background-color: #fff; border: 1px #dddddd solid; border-radius: 4px; -webkit-border-radius: 4px; }
 .number-body .number-keyboard-item.disable { background-color: #efefef; color: #999;}
+/* 字母键盘 */
+.number-body .character-lower-cont, .number-body .character-upper-cont { width: 100%; height: 160px; background-color: #efefef;}
+.number-body .character-lower-keyboard, .number-body .character-upper-keyboard { width: 100%; height: 100%;}
+.number-body .character-lower-item, .number-body .character-upper-item, .number-body .character-special-item { float: left; width: 10%; height: 35px; margin-left: 1%; margin-top: 4px; line-height: 35px; text-align: center; color: #333; background-color: #fff; border: 1px #dddddd solid; border-radius: 4px; -webkit-border-radius: 4px; }
+.number-body .character-special-item { width: 20%; margin-left: 4%;}
+
 /* layer css */
 .number-body .numberMaskbg{ z-index: 1000; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(30, 30, 30, .5);}
 .number-body .number-inner-maskBg { z-index: 1002; display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(30, 30, 30, .5); }
 .number-body .number-inner-message { z-index: 1003; display: none; position: absolute; top: 50%; left: 50%; padding: 10px; font-size: 14px; line-height: 24px; text-align: center; color: #fff; background-color: #666; transform: translate(-50%, -50%); -webkit-transform: translate(-50%, -50%);}
 
 
+
 /* 页面condition */
 .activeKeyboard { margin-top: 20px; font-size: 12px;}
-.item { margin: 12px 0; font-size: 12px; line-height: 40px;}
+.item { font-size: 12px; line-height: 40px;}
 input[type=number] { width: 50%; height: 28px; padding: 0 6px; line-height: 28px; border: 1px #999 solid; -webkit-border-radius: 4px; border-radius: 4px;}
 .searchCont { padding: 0 10px; font-size: 12px; }
 .searchCont div { padding: 10px 0;}

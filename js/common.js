@@ -238,7 +238,7 @@ numberKeyBoard.prototype = {
             } else if (showInput.value.length > 1) {
                 if (showInput.value.indexOf('.') > -1) {
                     var floatList = showInput.value.split('.');
-                    if (type === 'money') {
+                    if (this.option.type === 'money') {
                         if (floatList[1].length === 2) {
                             this.noneKey(items);
                         } else {
@@ -585,13 +585,53 @@ window.dave = {
         return node.parentNode; 
     },
     getTemplate: function(){
-        var templateList = [];
+        var templateList = [],
+            characterLowList = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'],
+            characterUpperList = ['A','B','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
         templateList.push('<div class="numberMaskbg"></div>');
         templateList.push('<div class="number-inner-message"></div>');
+        
         templateList.push('<div class="number-content">');
         templateList.push('<div class="number-top"><a href="javascript:void(0);" class="number-cancel" id="number_cancel">取消</a><a href="javascript:void(0);" class="number-confirm" id="number_confirm">确定</a><div class="number-showNum"><input type="text" name="" readonly id="number_showNum"></div></div>');
-        
-        templateList.push('<div class="number-cont"><ul class="number-keyboard" id="number_keyboard">')
+        // 小写字母键盘
+        templateList.push('<div class="character-lower-cont"><ul class="character-lower-keyboard" id="character_lower_keyboard">');
+        for (var i = 0; i < 31; i++) {
+            if (i < 26){ 
+                templateList.push('<li class="character-lower-item">' + characterLowList[i] + '</li>');
+            } else if (i === 26) {
+                templateList.push('<li class="character-lower-item toUpper"><i class="flag"></i></li>');
+            } else if (i === 27) {
+                templateList.push('<li class="character-special-item">数</li>');
+            } else if (i === 28) {
+                templateList.push('<li class="character-special-item">@</li>');
+            } else if (i === 29) {
+                templateList.push('<li class="character-special-item">_</li>');
+            } else if (i === 30) {
+                templateList.push('<li class="character-special-item">x</li>');
+            }
+        }
+        templateList.push('</ul>');
+        // 大写字母键盘
+        templateList.push('<div class="character-upper-cont"><ul class="character-upper-keyboard" id="character_upper_keyboard"');
+        for (var i = 0; i < 31; i++) {
+            if (i < 26){ 
+                templateList.push('<li class="character-upper-item">' + characterUpperList[i] + '</li>');
+            } else if (i === 26) {
+                templateList.push('<li class="character-upper-item toLower"><i class="flag"></i></li>');
+            } else if (i === 27) {
+                templateList.push('<li class="character-special-item">数</li>');
+            } else if (i === 28) {
+                templateList.push('<li class="character-special-item">@</li>');
+            } else if (i === 29) {
+                templateList.push('<li class="character-special-item">_</li>');
+            } else if (i === 30) {
+                templateList.push('<li class="character-special-item">x</li>');
+            }
+        }
+        templateList.push('</ul>');
+
+        // 数字键盘
+        templateList.push('<div class="number-cont"><ul class="number-keyboard" id="number_keyboard">');
         for (var i =0; i < 12; i++) {
             if (i < 9){
                 templateList.push('<li class="number-keyboard-item">' + (i + 1) + '</li>');
