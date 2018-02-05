@@ -169,5 +169,5 @@ window.dave = {
     lowerCharReg: /^[a-z]+$/,
     upperCharReg: /^[A-Z]+$/,
     charAndNum: /^[A-Za-z0-9]+$/,
-    passwordReg: /^[a-zA-Z0-9@_]{5,17}$/
+    passwordReg: /^[a-zA-Z0-9@_]$/
 };

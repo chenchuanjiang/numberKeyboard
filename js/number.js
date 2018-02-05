@@ -203,9 +203,20 @@ numberKeyBoard.prototype = {
         if (!this.option.length) {
             return;
         };
-        if (showInput.value.length === this.option.length) {
-            this.noneKey(items);
+        var l = this.option.length.split(',');
+        if (l.length === 2 && l[1]) {
+            if (showInput.value.length === (l[1] - 0)) {
+                this.noneKey(items);
+                return;
+            }
         }
+        if (l.length === 1) {
+            if (showInput.value.length === (l[0] - 0)) {
+                this.noneKey(items);
+                return;
+            }
+        }
+        
     },
     phoneNum: function(items, showInput){
         if (showInput.value.length === 0) {
@@ -322,8 +333,18 @@ numberKeyBoard.prototype = {
         if (!this.option.length) {
             return;
         };
-        if (showInput.value.length === this.option.length) {
-            this.noneKey(items);
+        var l = this.option.length.split(',');
+        if (l.length === 2 && l[1]) {
+            if (showInput.value.length === (l[1] - 0)) {
+                this.noneKey(items);
+                return;
+            }
+        }
+        if (l.length === 1) {
+            if (showInput.value.length === (l[0] - 0)) {
+                this.noneKey(items);
+                return;
+            }
         }
     },
     emailChar: function(numItems, lowerItems, upperItems, charOper, showInput) {
@@ -647,6 +668,30 @@ numberKeyBoard.prototype = {
                 } else {
                     if (showInput.value < minValue || showInput.value > maxValue) {
                         this.message = '请输入' + minValue + '到' + maxValue + '之间的值';
+                        return false;
+                    }
+                }
+            }
+            if (['number', 'lowerChar', 'upperChar', 'character', 'password', 'charAndNum'].indexOf(this.option.type)) {
+                var l = this.option.length;
+                if (!l) {
+                    return true;
+                }
+                var a = l.split(',');
+                if (a.length === 1) {
+                    if (showInput.value.length > (a[0] - 0)) {
+                        this.message = '请输入长度小于或等于' + a[0] + '的值';
+                        return false;
+                    }
+                }
+                if (a.length === 2 && a[1]) {
+                    if (showInput.value.length < (a[0] - 0) || showInput.value.length > (a[1] - 0)) {
+                        this.message = '请输入长度在' + a[0] + '到' + a[1] + '之间的值';
+                        return false;
+                    }
+                } else if (a.length === 2 && !a[1]) {
+                    if (showInput.value.length < (a[0] - 0)) {
+                        this.message = '请输入长度大于或等于' + a[0] + '的值';
                         return false;
                     }
                 }
