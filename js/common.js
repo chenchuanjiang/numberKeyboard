@@ -90,9 +90,12 @@ window.dave = {
         this.proxyClick(this.optionsList);
     },
     isInArr: function(item, list) {
-        var a = JSON.stringify(item), i = 0, l = list.length;
+        var a = item, i = 0, l = list.length;
         for (i = 0; i < l; i++) {
-            if (a === JSON.stringify(list[i])) {
+            if (a.elem === list[i].elem && JSON.stringify(a) !== JSON.stringify(list[i])) {
+                list[i] = a;
+                return true;
+            } else if(a.elem === list[i].elem && JSON.stringify(a) === JSON.stringify(list[i])) {
                 return true;
             }
         }
@@ -166,5 +169,5 @@ window.dave = {
     lowerCharReg: /^[a-z]+$/,
     upperCharReg: /^[A-Z]+$/,
     charAndNum: /^[A-Za-z0-9]+$/,
-    passwordReg: /^[a-zA-Z]\w{5,17}$/
+    passwordReg: /^[a-zA-Z0-9@_]{5,17}$/
 };

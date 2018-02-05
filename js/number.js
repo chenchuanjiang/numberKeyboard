@@ -184,7 +184,7 @@ numberKeyBoard.prototype = {
     },
     certIdNum: function(numItems, lowerItems, upperItems, charOper, showInput){
         // specialCode.innerHTML = 'X';
-        this.noneKey(charOper);
+        this.severalKey(charOper, [0]);
         this.severalKey(lowerItems, [23]);
         this.severalKey(upperItems, [23]);
         if (showInput.value.length === 17) {
@@ -192,6 +192,7 @@ numberKeyBoard.prototype = {
         } else if(showInput.value.length < 17) {
             this.severalNoneKey(numItems, [9]);
         } else {
+            this.noneKey(charOper);
             this.noneKey(numItems);
             this.noneKey(lowerItems);
             this.noneKey(upperItems);
@@ -230,7 +231,7 @@ numberKeyBoard.prototype = {
                 if (showInput.value === '0') {
                     this.severalKey(items, [9]);
                 } else {
-                    var maxValue = this.option.maxValue;
+                    var maxValue = this.option.maxValue || 999999999;
                     if (maxValue) {
                         if (Math.floor(maxValue/showInput.value) < 10) {
                             this.severalKey(items, [9])
@@ -266,7 +267,7 @@ numberKeyBoard.prototype = {
                         }
                     }
                 } else {
-                    var maxValue = this.option.maxValue;
+                    var maxValue = this.option.maxValue || 999999999;
                     if (!maxValue) {
                         this.allKey(items);
                     } else {
@@ -343,6 +344,8 @@ numberKeyBoard.prototype = {
                 this.severalNoneKey(charOper, [1, 2, 3]);
                 this.severalNoneKey(numItems, [10])
             }
+        } else {
+            this.severalNoneKey(numItems, [10])
         }
         var l = showInput.value.split('.'),
             a = l[l.length-1];
@@ -350,6 +353,7 @@ numberKeyBoard.prototype = {
         if (!a) {
             this.severalNoneKey(charOper, [1, 2, 3]);
             this.severalNoneKey(numItems, [10])
+            return;
         }
 
         if (a.length === 5) {
@@ -415,28 +419,6 @@ numberKeyBoard.prototype = {
             charToLower = this.getElems('class', 'character-upper-keyboard .key-item').item(26); // 大写切换成小写 英文的切换数字的按钮
         // specialCode.innerHTML = '.';
         this.showblock(this.contType);
-        if(t === 'lowerChar') {
-            this.noneOper(charOper);
-            this.character(lowerCharItems, showInput);
-        }
-        if (t === 'upperChar') {
-            this.noneOper(charOper);
-            this.character(upperCharItems, showInput);
-        }
-        if (t === 'character') {
-            this.noneOper(charOper);
-            this.character(lowerCharItems, showInput);
-            this.character(upperCharItems, showInput);
-        }
-        if (t === 'email') {
-            this.emailChar(numItems, lowerCharItems, upperCharItems, charOper, showInput);
-        }
-        if (t === 'password') {
-            this.passwordNum(numItems, lowerCharItems, upperCharItems, charOper, showInput);
-        }
-        if (t === 'charAndNum') {
-            this.charAndNum(numItems, lowerCharItems, upperCharItems, charOper, showInput);
-        }
         // 身份证的长度是默认好的
         if (t === 'certId') {
             this.certIdNum(numItems, lowerCharItems, upperCharItems, charOper, showInput);
@@ -460,6 +442,30 @@ numberKeyBoard.prototype = {
         } else {
             this.point(specialCode);
         }
+
+        if(t === 'lowerChar') {
+            this.noneOper(charOper);
+            this.character(lowerCharItems, showInput);
+        }
+        if (t === 'upperChar') {
+            this.noneOper(charOper);
+            this.character(upperCharItems, showInput);
+        }
+        if (t === 'character') {
+            this.noneOper(charOper);
+            this.character(lowerCharItems, showInput);
+            this.character(upperCharItems, showInput);
+        }
+        if (t === 'email') {
+            this.emailChar(numItems, lowerCharItems, upperCharItems, charOper, showInput);
+        }
+        if (t === 'password') {
+            this.passwordNum(numItems, lowerCharItems, upperCharItems, charOper, showInput);
+        }
+        if (t === 'charAndNum') {
+            this.charAndNum(numItems, lowerCharItems, upperCharItems, charOper, showInput);
+        }
+
         if (t === 'password' || t === 'email' || t === 'charAndNum') {
             numChange.className = numChange.className.replace(' disable', '');
             charChange.className = charChange.className.replace(' disable', '');
@@ -632,7 +638,7 @@ numberKeyBoard.prototype = {
         if (dave[this.option.type + 'Reg'].test(showInput.value)) {
             if (['money', 'float'].indexOf(this.option.type) > -1) {
                 var minValue = this.option.minValue || 0,
-                    maxValue = this.option.maxValue;
+                    maxValue = this.option.maxValue || 999999999;
                 if (!maxValue) {
                     if (showInput.value < minValue) {
                         this.message = '请输入大于' + minValue + '的值';
