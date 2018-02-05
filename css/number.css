@@ -1,25 +1,46 @@
-.number-body { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 999; }
+.keyboard-body { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 999; }
+
+.keyboard-body .keyboard-content {position: absolute; bottom: 0; left: 0; width: 100%; height: 200px; z-index: 1001;}
+.keyboard-body .keyboard-top { width: 100%; height: 40px; padding: 0 2.5%; background-color: #efefef; border-bottom: 1px #dddddd solid; }
+.keyboard-body .keyboard-cancel{ float: left; width: 80px;; height: 100%; font-size: 14px; line-height: 40px; text-align: center; color: #666;}
+.keyboard-body .keyboard-confirm{ float: right; width: 80px; height: 100%; font-size: 14px; line-height: 40px; text-align: center; color: cornflowerblue;}
+.keyboard-body .keyboard-showNum{ height: 100%; margin: 0 80px;}
+.keyboard-body .keyboard-showNum input { width: 100%; height: 100%; font-size: 16px; text-align: center; color: #999;}
 /* 数字键盘 */
-.number-body .number-content {position: absolute; bottom: 0; left: 0; width: 100%; height: 200px; z-index: 1001;}
-.number-body .number-top { width: 100%; height: 40px; padding: 0 2.5%; background-color: #efefef; border-bottom: 1px #dddddd solid; }
-.number-body .number-cancel{ float: left; width: 80px;; height: 100%; font-size: 14px; line-height: 40px; text-align: center; color: #666;}
-.number-body .number-confirm{ float: right; width: 80px; height: 100%; font-size: 14px; line-height: 40px; text-align: center; color: cornflowerblue;}
-.number-body .number-showNum{ height: 100%; margin: 0 80px;}
-.number-body .number-showNum input { width: 100%; height: 100%; font-size: 16px; text-align: center; color: #999;}
-.number-body .number-cont { width: 100%; height: 160px; background-color: #efefef;}
-.number-body .number-keyboard { width: 100%; height: 100%;}
-.number-body .number-keyboard-item { float: left; width: 30%; height: 35px; margin-left: 2.5%; margin-top: 4px; line-height: 35px; text-align: center; color: #333; background-color: #fff; border: 1px #dddddd solid; border-radius: 4px; -webkit-border-radius: 4px; }
-.number-body .number-keyboard-item.disable { background-color: #efefef; color: #999;}
+.keyboard-body .number-cont { width: 100%; height: 160px; background-color: #efefef;}
+.keyboard-body .number-keyboard { width: 100%; height: 100%;}
+.keyboard-body .number-keyboard-item, .keyboard-body .number-special-item { float: left; width: 30%; height: 35px; margin-left: 2.5%; margin-top: 4px; line-height: 35px; text-align: center; color: #333; background-color: #fff; border: 1px #dddddd solid; border-radius: 4px; -webkit-border-radius: 4px; }
+.keyboard-body .number-keyboard-item.disable, .keyboard-body .number-special-item.disable { background-color: #efefef; color: #999;}
+.keyboard-body .number-special-item { width: 20%; margin-left: 4%;}
 /* 字母键盘 */
-.number-body .character-lower-cont, .number-body .character-upper-cont { width: 100%; height: 160px; background-color: #efefef;}
-.number-body .character-lower-keyboard, .number-body .character-upper-keyboard { width: 100%; height: 100%;}
-.number-body .character-lower-item, .number-body .character-upper-item, .number-body .character-special-item { float: left; width: 10%; height: 35px; margin-left: 1%; margin-top: 4px; line-height: 35px; text-align: center; color: #333; background-color: #fff; border: 1px #dddddd solid; border-radius: 4px; -webkit-border-radius: 4px; }
-.number-body .character-special-item { width: 20%; margin-left: 4%;}
+.keyboard-body .character-cont { display: none; width: 100%; background-color: #efefef;}
+.keyboard-body .character-cont::after { display:block; clear:both; content:""; visibility:hidden; height:0;}
+.keyboard-body .character-lower-cont, .keyboard-body .character-upper-cont {  display: none; width: 100%; height: 160px; background-color: #efefef;}
+.keyboard-body .character-lower-keyboard, .keyboard-body .character-upper-keyboard { width: 100%;}
+.keyboard-body .operSym { padding-bottom: 4px;}
+.keyboard-body .character-lower-keyboard::after, .keyboard-body .character-upper-keyboard::after, .keyboard-body .operSym::after { display:block; clear:both; content:""; visibility:hidden; height:0;}
+.keyboard-body .character-lower-item, .keyboard-body .character-upper-item, .keyboard-body .character-special-item { float: left; width: 10%; height: 35px; margin-left: 1%; margin-top: 4px; line-height: 35px; text-align: center; color: #333; background-color: #fff; border: 1px #dddddd solid; border-radius: 4px; -webkit-border-radius: 4px; }
+.keyboard-body .character-lower-item.disable, .keyboard-body .character-upper-item.disable, .keyboard-body .character-special-item.disable { background-color: #efefef; color: #999;}
+.keyboard-body .character-special-item { width: 17.6%; margin-left: 2%;}
+/* .keyboard-body .caLock { text-align: center;} */
+.keyboard-body .caLock .flag { position: relative; display: block; width: 8px; height: 11px; margin: 0 auto; margin-top: 15px; border: 1px solid #666;}
+.keyboard-body .caLock .flag::before { display: block; position: absolute; top: -8px; left: -1px; width: 0; height: 0; border-bottom: 4px solid #666; border-right: 4px solid transparent; border-left: 4px solid transparent; border-top: 4px solid transparent; content: '';}
+.keyboard-body .caLock .flag::after { display: block; position: absolute; top: -6px; left: 0; width: 0; height: 0; border-bottom: 3px solid #efefef; border-right: 3px solid transparent; border-left: 3px solid transparent; border-top: 3px solid transparent; content: '';}
+
+
+.keyboard-body .character-upper-item .flag { background-color: cornflowerblue; border: 1px solid cornflowerblue;}
+.keyboard-body .character-upper-item .flag::before { border-bottom: 4px solid cornflowerblue;}
+.keyboard-body .character-upper-item .flag::after { border-bottom: 3px solid cornflowerblue;}
+
+/* .keyboard-body .caLock .flag.disable { position: relative; display: block; width: 8px; height: 11px; margin: 0 auto; margin-top: 15px; border: 1px solid cornflowerblue;}
+.keyboard-body .caLock .flag.disable::before { display: block; position: absolute; top: -8px; left: -1px; width: 0; height: 0; border-bottom: 4px solid cornflowerblue; border-right: 4px solid transparent; border-left: 4px solid transparent; border-top: 4px solid transparent; content: '';}
+.keyboard-body .caLock .flag.disable::after { display: block; position: absolute; top: -6px; left: 0; width: 0; height: 0; border-bottom: 3px solid cornflowerblue; border-right: 3px solid transparent; border-left: 3px solid transparent; border-top: 3px solid transparent; content: '';} */
+
 
 /* layer css */
-.number-body .numberMaskbg{ z-index: 1000; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(30, 30, 30, .5);}
-.number-body .number-inner-maskBg { z-index: 1002; display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(30, 30, 30, .5); }
-.number-body .number-inner-message { z-index: 1003; display: none; position: absolute; top: 50%; left: 50%; padding: 10px; font-size: 14px; line-height: 24px; text-align: center; color: #fff; background-color: #666; transform: translate(-50%, -50%); -webkit-transform: translate(-50%, -50%);}
+.keyboard-body .keyboardMaskbg{ z-index: 1000; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(30, 30, 30, .5);}
+.keyboard-body .keyboard-inner-maskBg { z-index: 1002; display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(30, 30, 30, .5); }
+.keyboard-body .keyboard-inner-message { z-index: 1003; display: none; position: absolute; top: 50%; left: 50%; padding: 10px; font-size: 14px; line-height: 24px; text-align: center; color: #fff; background-color: #666; transform: translate(-50%, -50%); -webkit-transform: translate(-50%, -50%);}
 
 
 

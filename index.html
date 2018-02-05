@@ -17,13 +17,17 @@
         </div>
         <div class="item">
             <span>输入类型</span>&nbsp;&nbsp;
-            <label><input type="radio" name="type" id="certid" value="certid">certid</label>&nbsp;&nbsp;
+            <label><input type="radio" name="type" id="certId" value="certId">certId</label>&nbsp;&nbsp;
             <label></label><input type="radio" name="type" id="number" value="number">number</label>&nbsp;&nbsp;
             <label></label><input type="radio" name="type" id="phone" value="phone">phone</label>&nbsp;&nbsp;
             <label></label><input type="radio" name="type" id="money" value="money">money</label>&nbsp;&nbsp;<br />
             <label></label><input type="radio" name="type" id="float" value="float">float</label>&nbsp;&nbsp;
-            <!-- <label></label><input type="radio" name="type" id="interge">phone</label>&nbsp;&nbsp;
-            <label></label><input type="radio" name="type" id="float">money</label>&nbsp;&nbsp; -->
+            <label></label><input type="radio" name="type" id="lowerChar" value="lowerChar">lowerChar</label>&nbsp;&nbsp;
+            <label></label><input type="radio" name="type" id="upperChar" value="upperChar">upperChar</label>&nbsp;&nbsp;
+            <label></label><input type="radio" name="type" id="character" value="character">character</label>&nbsp;&nbsp;
+            <label></label><input type="radio" name="type" id="email" value="email">email</label>&nbsp;&nbsp;
+            <label></label><input type="radio" name="type" id="password" value="password">password</label>&nbsp;&nbsp;
+            <label></label><input type="radio" name="type" id="charAndNum" value="charAndNum">charAndNum</label>&nbsp;&nbsp;
         </div>
         <div>
             <span>整数长度</span>
@@ -46,11 +50,14 @@
         </div>
     </div>
     <div class="activeKeyboard">
-        <span>进入插件的入口input</span>
-        <input id="showKeyboard" class="showKeyboard" type="text" readonly placeholder="请输入数字" />
+        <span>进入插件的入口input</span><br />
+        <input id="showKeyboard" class="showKeyboard" type="text" readonly placeholder="请输入数字" /><br />
+        <input id="showKeyboard1" class="showKeyboard" type="text" readonly placeholder="请输入数字1" /><br />
+        <input id="showKeyboard2" class="showKeyboard" type="text" readonly placeholder="请输入数字2" /><br />
     </div>
 </body>
 <script src="./js/common.js"></script>
+<script src="./js/number.js"></script>
 <script>
     var option = {
         elem: 'showKeyboard'
@@ -64,7 +71,12 @@
         option.minValue = parseInt(dave.$('#minNum').value);
         dave.virmKeyboard(option);
     }
-
+    dave.virmKeyboard({
+        elem: 'showKeyboard1'
+    });
+    dave.virmKeyboard({
+        elem: 'showKeyboard2'
+    });
     
 </script>
 </html>
