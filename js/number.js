@@ -16,7 +16,7 @@
  * @param {layerID} ID
  */
 function numberKeyBoard(option) {
-    this.option = dave.extend(true, dave.defaultParam, option);
+    this.option = dave.extend(false, dave.defaultParam, option);
     this.hasDom = false;
     this.ID = '';
     this.numberBody = '';
@@ -78,14 +78,43 @@ numberKeyBoard.prototype = {
         if (colors[5].substr(1, 2) > 'ee' && colors[5].substr(3, 2) > 'ee' && colors[5].substr(5, 2) > 'ee') {
             
         }else {
+            $css.push('#' + this.ID + ' .keyboard-content, ');
             $css.push('#' + this.ID + ' .number-cont {');
-            $css.push('background-color: ' + colors[8] + ';}');
+            $css.push('background-color: ' + colors[7] + ';}');
+            $css.push('#' + this.ID + ' .character-upper-item.disable,');
+            $css.push('#' + this.ID + ' .character-lower-item.disable,');
+            $css.push('#' + this.ID + ' .character-special-item.disable,');
             $css.push('#' + this.ID + ' .number-keyboard-item.disable {');
             $css.push('background-color: ' + colors[5] + ';}');
+            $css.push('#' + this.ID + ' .character-upper-item,');
+            $css.push('#' + this.ID + ' .character-lower-item,');
+            $css.push('#' + this.ID + ' .character-special-item,');
             $css.push('#' + this.ID + ' .number-keyboard-item {');
-            $css.push('background-color: ' + colors[2] + ';');
+            $css.push('background-color: ' + colors[3] + ';');
             $css.push('color: #fff;');
-            $css.push('}');   
+            $css.push('}');
+            $css.push('#' + this.ID + ' .caLock .flag {');
+            $css.push('background-color: ' + colors[9] + ';');
+            $css.push('border: 1px solid ' + colors[9] + ';')
+            $css.push('}');
+            $css.push('#' + this.ID + ' .character-upper-item .flag {');
+            $css.push('background-color: ' + colors[1] + ';');
+            $css.push('border: 1px solid ' + colors[1] + ';')
+            $css.push('}');
+
+            $css.push('#' + this.ID + ' .caLock .flag::after {');
+            $css.push('border-bottom: 3px solid ' + colors[9] + ';');
+            $css.push('}');
+            $css.push('#' + this.ID + ' .caLock .flag::before {');
+            $css.push('border-bottom: 4px solid ' + colors[9] + ';');
+            $css.push('}');
+            
+            $css.push('#' + this.ID + ' .character-upper-item .flag::after {')
+            $css.push('border-bottom: 3px solid ' + colors[1] + ';');
+            $css.push('}');
+            $css.push('#' + this.ID + ' .character-upper-item .flag::before {');
+            $css.push('border-bottom: 4px solid ' + colors[1] + ';');
+            $css.push('}');
         }
         return $css.join('');
     },
@@ -232,12 +261,25 @@ numberKeyBoard.prototype = {
     floatNum: function(items, showInput){
         this.allNum(items);
             if (!showInput.value.length) {
-                var maxValue = this.option.maxValue;
-                if (maxValue) {
-                    if (maxValue.length === 1){
-                        this.severalKey(items, this.getKeys(maxValue));
+                var maxValue = this.option.maxValue || 999999999,
+                    minValue = this.option.minValue || 0;
+                if ((maxValue + '').length === (minValue + '').length) {
+                    var a = (maxValue + '').substr(0, 1) - 0, b = (minValue + '').substr(0, 1) - 0, i = 0,
+                        k = [];
+                    for (i = b; i < a; i++) {
+                        if (i === 0) {
+                            k.push(10);
+                        } else {
+                            k.push(i - 1);
+                        }
                     }
+                    this.severalKey(items, k);
                 }
+                // if (maxValue) {
+                //     if (maxValue.length === 1){
+                //         this.severalKey(items, this.getKeys(maxValue));
+                //     }
+                // }
             } else if (showInput.value.length === 1) {
                 if (showInput.value === '0') {
                     this.severalKey(items, [9]);

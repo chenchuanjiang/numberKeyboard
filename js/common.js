@@ -144,13 +144,13 @@ window.dave = {
             if (i < 9){
                 templateList.push('<li class="number-keyboard-item key-item">' + (i + 1) + '</li>');
             } else if (i === 9) {
-                templateList.push('<li class="number-special-item key-item">En</li>');
+                templateList.push('<li class="number-keyboard-item number-special-item key-item">En</li>');
             } else if (i === 10) {
-                templateList.push('<li class="number-special-item key-item">.</li>');
+                templateList.push('<li class="number-keyboard-item number-special-item key-item">.</li>');
             } else if (i === 11) {
-                templateList.push('<li class="number-special-item key-item">0</li>');
+                templateList.push('<li class="number-keyboard-item number-special-item key-item">0</li>');
             } else {
-                templateList.push('<li class="number-special-item key-item">×</li>');
+                templateList.push('<li class="number-keyboard-item number-special-item key-item">×</li>');
             }
         }
         templateList.push('</ul></div>');
@@ -168,6 +168,6 @@ window.dave = {
     characterReg: /^[A-Za-z]+$/,
     lowerCharReg: /^[a-z]+$/,
     upperCharReg: /^[A-Z]+$/,
-    charAndNum: /^[A-Za-z0-9]+$/,
+    charAndNumReg: /^[A-Za-z0-9]+$/,
     passwordReg: /^[a-zA-Z0-9@_]$/
 };
